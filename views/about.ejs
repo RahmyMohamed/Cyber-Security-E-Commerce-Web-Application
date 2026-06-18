@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Shield Academy Matrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --primary-neon: #00ffcc;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --border-color: #1f2937;
+            --danger-neon: #ff3333;
+            --accent-glow: rgba(0, 255, 204, 0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 🌐 NAVBAR MENU */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--primary-neon);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            color: var(--primary-neon);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--danger-neon);
+            color: var(--danger-neon);
+            padding: 6px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger-neon);
+            color: var(--text-main);
+        }
+
+        /* 🎯 CREATIVE MAIN CONTENT */
+        main {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+            flex: 1;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* 🚀 HERO SECTION WITH DYNAMIC GRAPHICS BACKDROP */
+        .about-hero {
+            position: relative;
+            background: linear-gradient(135px, #111827 0%, #070a13 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            margin-bottom: 60px;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .about-hero h1 {
+            font-size: 42px;
+            margin: 0 0 15px 0;
+            background: linear-gradient(to right, #ffffff, var(--primary-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .about-hero p {
+            color: var(--text-muted);
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* 🎚️ IMAGE INTEGRATION GRID DISPLAY */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .showcase-grid { grid-template-columns: 1fr; }
+        }
+
+        .showcase-image-wrapper {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .showcase-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .showcase-image-wrapper:hover .showcase-image {
+            transform: scale(1.05);
+        }
+
+        .showcase-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(11,15,25,0.9) 10%, transparent 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 30px;
+        }
+
+        .showcase-text h2 {
+            font-size: 24px;
+            margin: 0 0 10px 0;
+            color: var(--primary-neon);
+        }
+
+        .showcase-text p {
+            margin: 0;
+            color: #e2e8f0;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* ⚡ INTERACTIVE HOVER CARD BLOCKS */
+        .features-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-node {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-node:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-neon);
+            box-shadow: 0 10px 25px rgba(0, 255, 204, 0.1);
+        }
+
+        .icon-box {
+            font-size: 40px;
+            color: var(--primary-neon);
+            margin-bottom: 20px;
+        }
+
+        .feature-node h3 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+        }
+
+        .feature-node p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* 🛑 FOOTER */
+        footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 60px;
+        }
+
+        @keyframes cyberPulse {
+            0% { text-shadow: 0 0 4px rgba(0, 255, 204, 0.2); transform: scale(1); }
+            50% { text-shadow: 0 0 15px var(--primary-neon); transform: scale(1.02); }
+            100% { text-shadow: 0 0 4px rgba(0, 255, 204, 0.2); transform: scale(1); }
+        }
+
+        .logo-animated {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: cyberPulse 3s infinite ease-in-out;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <div class="logo logo-animated">🛡️ Shield Academy</div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/courses">Courses</a></li>
+                <li><a href="/dashboard">My Dashboard</a></li>
+                <li><a href="/about" class="active">About</a></li>
+                
+                <% if (user && user.role === 'admin') { %>
+                    <li>
+                        <a href="/admin/dashboard" style="border: 1px solid #ff3366; color: #ff3366; padding: 4px 12px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px;">
+                            Admin Panel
+                        </a>
+                    </li>
+                <% } %>
+            </ul>
+            <div class="user-profile">
+                <span>Welcome, <b style="color: var(--primary-neon);"><%= user.name %></b></span>
+                <a href="/logout" class="logout-btn">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <div class="about-hero">
+            <h1>DECODING CYBER LAB INFRASTRUCTURE</h1>
+            <p>Shield Academy provides an advanced ecosystem for next-generation security engineers. We specialize in dynamic automation setups, deep-penetration testing arrays, and threat analytics monitoring nodes.</p>
+        </div>
+
+        <div class="showcase-grid">
+            <div class="showcase-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" class="showcase-image" alt="Cyber security lab architecture">
+                <div class="showcase-overlay">
+                    <div class="showcase-text">
+                        <h2>Advanced Research Cell</h2>
+                        <p>Our virtual sandbox terminals are configured to deploy deep analysis framework execution instantly with zero asset disruption.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="showcase-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80" class="showcase-image" alt="Server clusters computing hardware">
+                <div class="showcase-overlay">
+                    <div class="showcase-text">
+                        <h2>Infrastructure Defense</h2>
+                        <p>We train engineers to architect impenetrable security matrices across hybrid cloud systems using strict hardening protocols.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-matrix">
+            <div class="feature-node">
+                <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>Elite Training Core</h3>
+                <p>Curated learning materials engineered precisely from scratch to help navigate active digital threats effortlessly.</p>
+            </div>
+
+            <div class="feature-node">
+                <div class="icon-box"><i class="fa-solid fa-network-wired"></i></div>
+                <h3>Dynamic Webhooks</h3>
+                <p>Integrated pipeline protocols sync your enrollment status safely using automated transactional dispatch pipelines.</p>
+            </div>
+
+            <div class="feature-node">
+                <div class="icon-box"><i class="fa-solid fa-user-gear"></i></div>
+                <h3>Secured Console Nodes</h3>
+                <p>Strict structural backend access filters guarantee that data analytics parameters remain fully optimized and authorized.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        &copy; 2026 Shield Academy Enterprise. Zero-Cost Infrastructure Integration.
+    </footer>
+
+</body>
+</html>

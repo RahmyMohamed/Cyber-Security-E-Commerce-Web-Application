@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cyber Security Academy - Complete Checkout</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #121212; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1e1e1e; padding: 35px; border-radius: 12px; border: 1px solid #333; width: 360px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h2 { color: #00ffcc; margin-top: 0; font-size: 24px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #444; background: #2a2a2a; color: #fff; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: #00ffcc; color: #121212; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 15px; font-size: 15px; transition: background 0.2s; }
+        button:hover { background: #00ccaa; }
+        .footer { margin-top: 20px; font-size: 12px; color: #777; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Secure Checkout</h2>
+    <p style="text-align: left; margin-bottom: 5px; color: #aaa;">Product details:</p>
+    <p style="text-align: left; margin-top: 0;"><b>Cyber Security Course Bundle</b></p>
+    <p style="text-align: left; color: #aaa;">Total Cost: <b style="color: #fff;">Rs. 4999</b></p>
+    <hr style="border-color: #333; margin: 20px 0;">
+    
+    <input type="text" id="custName" placeholder="Your Name" value="Mohamed">
+    <input type="email" id="custEmail" placeholder="Your Email" value="mohamed.test@example.com">
+    
+    <button onclick="processMockPayment()">Pay Now (FREE Sandbox Simulation)</button>
+    <p id="statusMsg" style="margin-top: 15px; color: #00ffcc; font-size: 14px; min-height: 20px;"></p>
+    <div class="footer">Zero-Cost Infrastructure Link Integration</div>
+</div>
+
+<script>
+async function processMockPayment() {
+    const name = document.getElementById('custName').value;
+    const email = document.getElementById('custEmail').value;
+    const statusMsg = document.getElementById('statusMsg');
+    
+    if(!name || !email) {
+        statusMsg.innerText = "Please fill in all target field metrics.";
+        statusMsg.style.color = "#ff3333";
+        return;
+    }
+    
+    statusMsg.innerText = "Simulating encrypted verification token authorization...";
+    statusMsg.style.color = "#00ffcc";
+
+    try {
+        const response = await fetch('/api/checkout-mock', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                product: "Cyber Security Course Bundle",
+                amount: 4999
+            })
+        });
+
+        const data = await response.json();
+        if(data.success) {
+            statusMsg.innerText = "Success! Row updated & Invoice Email sent via n8n!";
+            statusMsg.style.color = "#00ffcc";
+        } else {
+            statusMsg.innerText = "Error executing endpoint data flow linkage.";
+            statusMsg.style.color = "#ff3333";
+        }
+    } catch (err) {
+        statusMsg.innerText = "Application backend communication failure.";
+        statusMsg.style.color = "#ff3333";
+    }
+}
+</script>
+
+</body>
+</html>

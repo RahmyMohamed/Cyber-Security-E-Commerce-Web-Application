@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= course.name %> - Shield Academy Core</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #060913; 
+            --card-bg: rgba(17, 24, 39, 0.8); 
+            --primary-neon: #00ffcc; 
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --border-color: rgba(31, 41, 55, 0.7);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(17, 24, 39, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 20px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .back-btn {
+            color: var(--primary-neon); text-decoration: none; font-weight: bold;
+            display: flex; align-items: center; gap: 8px; font-size: 14px;
+        }
+
+        main {
+            max-width: 1200px; margin: 40px auto; padding: 0 20px;
+            flex: 1; width: 100%; box-sizing: border-box;
+        }
+
+        .course-title-block {
+            border-left: 4px solid var(--primary-neon); padding-left: 15px; margin-bottom: 40px;
+        }
+
+        .course-title-block h2 { font-size: 32px; margin: 0 0 10px 0; }
+        .course-title-block p { color: var(--text-muted); margin: 0; }
+
+        .content-layout {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 30px;
+        }
+
+        @media (max-width: 768px) { .content-layout { grid-template-columns: 1fr; } }
+
+        /* 📺 VIRTUAL TERMINAL SIMULATOR FOR VIDEOS */
+        .video-simulator {
+            background: #000; border: 1px solid var(--border-color);
+            border-radius: 12px; height: 400px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7); position: relative; overflow: hidden;
+        }
+
+        .video-simulator i { font-size: 60px; color: var(--primary-neon); cursor: pointer; transition: transform 0.2s; }
+        .video-simulator i:hover { transform: scale(1.1); }
+
+        /* 📋 CONTENT LESSONS NODE LINK */
+        .modules-sidebar {
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 25px; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+        }
+
+        .modules-sidebar h3 { margin-top: 0; color: var(--primary-neon); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+
+        .lesson-row {
+            padding: 15px; border: 1px solid var(--border-color); border-radius: 6px;
+            margin-bottom: 10px; background: rgba(6, 9, 19, 0.5);
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lesson-row:hover {
+            border-color: var(--primary-neon); background: rgba(0, 255, 204, 0.05);
+        }
+
+        .lesson-info h4 { margin: 0 0 5px 0; font-size: 14px; color: #ffffff; }
+        .lesson-info span { font-size: 12px; color: var(--text-muted); }
+
+        .play-indicator { color: var(--primary-neon); font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div style="font-weight: bold; color: var(--primary-neon);">🛡️ SHIELD SECURE ACADEMY CORE</div>
+            <a href="/dashboard" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Return to Dashboard</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="course-title-block">
+            <h2><%= course.name %></h2>
+            <p><%= course.desc %></p>
+        </div>
+
+        <div class="content-layout">
+            <div class="video-simulator">
+                <div style="position: absolute; top: 15px; left: 15px; font-family: monospace; color: #00ff00; font-size: 12px;">
+                    [SECURE-STREAM-ACTIVE] // NODE_ID: 8841A
+                </div>
+                <i class="fa-regular fa-circle-play" onclick="startStream()"></i>
+                <p id="stream-text" style="margin-top: 15px; font-weight: 500; color: var(--text-muted);">Select a module from sidebar to initialize data stream.</p>
+            </div>
+
+            <div class="modules-sidebar">
+                <h3>Curriculum Assets</h3>
+                
+                <% if (course.modules && course.modules.length > 0) { %>
+                    <% course.modules.forEach(function(mod, index) { %>
+                        <div class="lesson-row" onclick="loadModule('<%= mod.title %>')">
+                            <div class="lesson-info">
+                                <h4><%= mod.title %></h4>
+                                <span><i class="fa-regular fa-clock"></i> <%= mod.duration %></span>
+                            </div>
+                            <div class="play-indicator"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p style="color: var(--text-muted); font-size: 14px;">No modules configured for this asset yet.</p>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function loadModule(title) {
+            document.getElementById('stream-text').innerText = `Ready to Stream: ${title}`;
+            document.getElementById('stream-text').style.color = "var(--primary-neon)";
+        }
+
+        function startStream() {
+            const streamText = document.getElementById('stream-text').innerText;
+            if(streamText.includes("Select a module")) {
+                alert("Please click on a curriculum asset from the right sidebar first!");
+            } else {
+                document.getElementById('stream-text').innerText = "Streaming Encrypted Video Asset Node... [LIVE]";
+                document.getElementById('stream-text').style.color = "#00ff00";
+            }
+        }
+    </script>
+</body>
+</html>

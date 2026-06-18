@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shield Academy - Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --primary-neon: #00ffcc;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --border-color: #1f2937;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 { color: var(--primary-neon); margin-bottom: 5px; }
+
+        /* 📊 METRICS GRID PANEL */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .metric-icon {
+            font-size: 28px;
+            color: var(--primary-neon);
+        }
+
+        .metric-info h4 { margin: 0; color: var(--text-muted); font-size: 13px; text-transform: uppercase; }
+        .metric-info p { margin: 5px 0 0 0; font-size: 20px; font-weight: bold; }
+
+        /* 📚 ENROLLED COURSES SECTION */
+        .section-title {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .order-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--primary-neon);
+        }
+
+        .empty-box {
+            background: var(--card-bg);
+            border: 1px dashed var(--border-color);
+            padding: 40px;
+            text-align: center;
+            border-radius: 8px;
+            color: var(--text-muted);
+        }
+
+        .btn-lab {
+            background: transparent;
+            border: 1px solid var(--primary-neon);
+            color: var(--primary-neon);
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .btn-lab:hover {
+            background: var(--primary-neon);
+            color: #000;
+        }
+
+        /* ↩️ BACK BUTTON STYLE */
+        .back-btn {
+            display: inline-block;
+            margin-top: 50px;
+            color: var(--primary-neon);
+            text-decoration: none;
+            border: 1px solid var(--primary-neon);
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-neon);
+            color: #000;
+            box-shadow: 0 0 15px var(--primary-neon);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🖥️ Student Control Panel</h1>
+            <p style="color: var(--text-muted);">Secure Infrastructure Node Active for: <b style="color: var(--primary-neon);"><%= user.name %></b></p>
+        </header>
+
+        <!-- 📊 CYBER METRICS HARDCODED + DYNAMIC PANEL -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <i class="fa-solid fa-graduation-cap metric-icon"></i>
+                <div class="metric-info">
+                    <h4>Enrolled Modules</h4>
+                    <p><%= orders.length %></p>
+                </div>
+            </div>
+            <div class="metric-card">
+                <i class="fa-solid fa-shield-halved metric-icon"></i>
+                <div class="metric-info">
+                    <h4>Lab Server Status</h4>
+                    <p style="color: #00ff00;">ONLINE</p>
+                </div>
+            </div>
+            <div class="metric-card">
+                <i class="fa-solid fa-terminal metric-icon"></i>
+                <div class="metric-info">
+                    <h4>CTF Rank Points</h4>
+                    <p>740 PTS</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📚 DYNAMIC COURSES EXTRACTION NODE -->
+        <h3 class="section-title"><i class="fa-solid fa-book-bookmark" style="color: var(--primary-neon);"></i> Your Active Curriculum Assets</h3>
+        
+        <% if (orders.length > 0) { %>
+            <div class="order-list">
+                <% orders.forEach(function(order) { %>
+                    <div class="order-item">
+                        <div>
+                            <h4 style="margin: 0 0 5px 0; font-size: 16px;"><%= order.courseName %></h4>
+                            <small style="color: var(--text-muted);">Enrolled on: <%= new Date(order.purchaseDate).toLocaleDateString() %></small>
+                        </div>
+                        <a href="/course/<%= order.courseId %>" class="btn-lab"><i class="fa-solid fa-flask"></i> Launch Cyber Lab</a>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="empty-box">
+                <i class="fa-solid fa-box-open" style="font-size: 40px; margin-bottom: 15px; display: block;"></i>
+                You haven't enrolled in any cybersecurity courses yet. Go to Storefront to start learning!
+            </div>
+        <% } %>
+
+        <div style="text-align: center;">
+            <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Storefront</a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Admin Control Console</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #070a13;
+            --bg-card: #0f1424;
+            --neon-admin: #ff3366;
+            --neon-cyan: #00ffcc;
+            --text-white: #ffffff;
+            --text-grey: #9ca3af;
+            --border-line: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-white);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-line);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-node {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--neon-admin);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exit-link {
+            color: var(--text-grey);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .exit-link:hover {
+            color: var(--neon-cyan);
+        }
+
+        main {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-info h3 {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-grey);
+            text-transform: uppercase;
+        }
+
+        .metric-info p {
+            margin: 5px 0 0 0;
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--neon-cyan);
+        }
+
+        .metric-icon {
+            font-size: 32px;
+            color: var(--neon-admin);
+            opacity: 0.8;
+        }
+
+        .data-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .data-section h2 {
+            margin-top: 0;
+            font-size: 18px;
+            border-left: 4px solid var(--neon-admin);
+            padding-left: 10px;
+            color: var(--text-white);
+            margin-bottom: 20px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #141b32;
+            color: var(--neon-cyan);
+            padding: 12px 15px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-line);
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-line);
+            color: #e2e8f0;
+        }
+
+        tr:hover td {
+            background-color: #161f38;
+        }
+
+        .role-badge {
+            background-color: rgba(0, 255, 204, 0.1);
+            color: var(--neon-cyan);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .role-badge.admin {
+            background-color: rgba(255, 51, 102, 0.1);
+            color: var(--neon-admin);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-node"><i class="fa-solid fa-terminal"></i> SHIELD PLATFORM AUDIT MATRIX</div>
+        <div>
+            <span style="margin-right: 20px;">Operator: <b style="color: var(--neon-cyan);"><%= user.name %></b></span>
+            <a href="/" class="exit-link"><i class="fa-solid fa-arrow-left"></i> Core Storefront</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-info">
+                    <h3>Total Node Profiles</h3>
+                    <p><%= stats.users %></p>
+                </div>
+                <div class="metric-icon"><i class="fa-solid fa-users"></i></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-info">
+                    <h3>Total Enrolled Orders</h3>
+                    <p><%= stats.orders %></p>
+                </div>
+                <div class="metric-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+            </div>
+        </div>
+
+        <div class="data-section">
+            <h2><i class="fa-solid fa-id-card"></i> Registered Platform User Profiles</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User ID Token</th>
+                            <th>Name</th>
+                            <th>Email Address Node</th>
+                            <th>Privilege Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% users.forEach(function(u) { %>
+                            <tr>
+                                <td style="font-family: monospace; color: var(--text-grey);"><%= u._id %></td>
+                                <td><b><%= u.name %></b></td>
+                                <td><%= u.email %></td>
+                                <td>
+                                    <span class="role-badge <%= u.role === 'admin' ? 'admin' : '' %>">
+                                        <%= u.role %>
+                                    </span>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="data-section">
+            <h2><i class="fa-solid fa-bolt"></i> Live Course Purchase Activity Tracker</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction Hash ID</th>
+                            <th>User Email Node</th>
+                            <th>Course ID Field</th>
+                            <th>Purchased Course Name</th>
+                            <th>Verification Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(orders.length === 0) { %>
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-grey);">No active transactional orders routed to this pipeline yet.</td>
+                            </tr>
+                        <% } else { %>
+                            <% orders.forEach(function(order) { %>
+                                <tr>
+                                    <td style="font-family: monospace; color: var(--text-grey);"><%= order._id %></td>
+                                    <td><b style="color: var(--neon-cyan);"><%= order.userEmail %></b></td>
+                                    <td><span style="font-family: monospace;"><%= order.courseId %></span></td>
+                                    <td><b><%= order.courseName %></b></td>
+                                    <td><%= new Date(order.purchaseDate).toLocaleString() %></td>
+                                </tr>
+                            <% }); %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
