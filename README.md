@@ -1,4 +1,7 @@
 # 🛡️ Shield Academy - Professional Cyber Store & Automation Lab
+![preview img](image)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/)
 
 Shield Academy is an advanced, full-stack cybersecurity e-commerce storefront and learning management portal. It provides students with seamless access to industry-grade training bundles and virtual lab sandbox environments while implementing cutting-edge enterprise automation behind the scenes.
 
