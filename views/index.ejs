@@ -56,12 +56,58 @@
             align-items: center;
         }
 
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--primary-neon);
+        /* =======================================================
+           🛡️ BRAND NAVBAR LOGO & NEON GLITCH ENGINE
+           ======================================================= */
+        .navbar-brand-node {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: default;
+            user-select: none;
+            text-decoration: none;
+        }
+
+        .nav-animated-shield {
+            position: relative;
+            width: 35px;
+            height: 38px;
+            background: transparent;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            border: 1.5px solid #00ffcc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+            animation: navShieldPulse 3s infinite ease-in-out;
+        }
+
+        .nav-animated-shield::before {
+            content: "🛡️";
+            font-size: 16px;
+        }
+
+        .nav-brand-name {
+            font-size: 20px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+            margin: 0;
+            animation: navNeonGlitch 4s infinite alternate;
+        }
+
+        @keyframes navShieldPulse {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 255, 204, 0.4); border-color: #00ffcc; }
+            50% { transform: scale(1.05); box-shadow: 0 0 18px rgba(255, 0, 85, 0.6); border-color: #ff0055; }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 255, 204, 0.4); border-color: #00ffcc; }
+        }
+
+        @keyframes navNeonGlitch {
+            0%, 95%, 100% { text-shadow: 0 0 8px rgba(0, 255, 204, 0.6), 0 0 15px rgba(0, 255, 204, 0.3); color: #fff; }
+            96% { text-shadow: -2px -1px 0 #ff0055, 2px 1px 0 #00ffcc; color: #ff0055; }
+            98% { text-shadow: 2px 1px 0 #ff0055, -2px -1px 0 #00ffcc; color: #00ffcc; }
         }
 
         .nav-menu {
@@ -328,7 +374,6 @@
             background-color: #00ccaa;
         }
 
-        /* 💳 PREMIUM MODAL BACKDROP GATEWAY LAYOUT */
         .modal-backdrop {
             position: fixed;
             inset: 0;
@@ -526,7 +571,13 @@
 
     <header>
         <div class="navbar">
-            <div class="logo logo-animated">🛡️ Shield Academy</div>
+            
+            <!-- INSTANTIATING ANIMATED NAVBAR BRAND ENGINE -->
+            <div class="navbar-brand-node">
+                <div class="nav-animated-shield"></div>
+                <span class="nav-brand-name">Shield Academy</span>
+            </div>
+
             <ul class="nav-menu">
                 <li><a href="/" class="active">Home</a></li>
                 <li><a href="/courses">Courses</a></li>
@@ -661,7 +712,6 @@ let activeCourseId = '';
 let activeCourseName = '';
 let loggedInUserEmail = '<%= user.email %>';
 
-// 🌌 RED BACKGROUND PARTICLES ENGINE
 const canvas = document.getElementById('matrix-bg');
 const ctx = canvas.getContext('2d');
 let particlesArray = [];
@@ -713,7 +763,6 @@ function connectNodes() {
 function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); for(let i=0; i<particlesArray.length; i++) { particlesArray[i].update(); particlesArray[i].draw(); } connectNodes(); requestAnimationFrame(animateParticles); }
 initParticles(); animateParticles();
 
-// 💳 GATEWAY MODAL DYNAMIC TRIGGERS
 function openPaymentGateway(courseId, courseName, price) {
     activeCourseId = courseId;
     activeCourseName = courseName;
@@ -732,7 +781,6 @@ function closePaymentGateway() {
     document.getElementById('gateway-modal').classList.remove('active');
 }
 
-// 🔥 REAL-TIME CRYPTO/CARD AUTHENTICATION LOOP EMULATION WITH CONDITION ENFORCEMENT
 async function processSecurePayment() {
     const cardNum = document.getElementById('card-number').value;
     const cardExp = document.getElementById('card-expiry').value;
@@ -747,7 +795,6 @@ async function processSecurePayment() {
         return;
     }
 
-    // Phase 1: Processing Animation Matrix
     payBtn.disabled = true;
     modalStatus.innerText = "🔐 Securing SSH Tunnel Node...";
     modalStatus.style.color = "var(--primary-neon)";
@@ -757,10 +804,8 @@ async function processSecurePayment() {
         modalStatus.style.color = "#ffaa00";
     }, 1200);
 
-    // Phase 2: Final Backend Server Pipeline Integration with Payment Status Payload
     setTimeout(async () => {
         try {
-            // 🔥 REAL-TIME CONDITION: CVV '123' அடித்தால் SUCCESS, இல்லையென்றால் DECLINED!
             let currentStatus = (cardCvv === '123') ? 'SUCCESS' : 'DECLINED';
 
             const response = await fetch('/api/checkout-mock', {
@@ -770,7 +815,7 @@ async function processSecurePayment() {
                     name: document.getElementById('card-name').value, 
                     email: loggedInUserEmail, 
                     courseId: activeCourseId,
-                    paymentStatus: currentStatus // Passing evaluation parameter to server
+                    paymentStatus: currentStatus 
                 })
             });
 
@@ -784,7 +829,6 @@ async function processSecurePayment() {
                 
                 setTimeout(closePaymentGateway, 1500);
             } else {
-                // Handle declined transaction state structure
                 modalStatus.innerText = "❌ Security Alert: Card verification declined or failed.";
                 modalStatus.style.color = "var(--danger-neon)";
                 payBtn.disabled = false;
@@ -797,7 +841,6 @@ async function processSecurePayment() {
     }, 2800);
 }
 
-// 📊 METRICS AND ACCORDION HANDLERS
 setInterval(() => {
     const attackNode = document.getElementById('counter-attacks');
     let currentAttacks = parseInt(attackNode.innerText.replace(/,/g, ''));

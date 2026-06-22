@@ -6,6 +6,14 @@
     <title><%= course.name %> - Shield Academy Core</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+
+        #matrix-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1; 
+            pointer-events: none;
+}
         :root {
             --bg-color: #060913; 
             --card-bg: rgba(17, 24, 39, 0.8); 
@@ -96,7 +104,7 @@
     </style>
 </head>
 <body>
-
+ <canvas id="matrix-bg"></canvas>
     <header>
         <div class="header-container">
             <div style="font-weight: bold; color: var(--primary-neon);">🛡️ SHIELD SECURE ACADEMY CORE</div>
@@ -121,6 +129,59 @@
 
             <div class="modules-sidebar">
                 <h3>Curriculum Assets</h3>
+<!-- 🔥 UPDATED: PREMIUM CYBER NEON QUIZ BUTTON DESIGN -->
+<div style="margin-top: 30px; padding: 0 5px;">
+    <a href="/course/<%= course.id %>/quiz" class="cyber-quiz-btn">
+        <span class="btn-glow"></span>
+        <span class="btn-text">
+            <i class="fa-solid fa-shield-halved"></i> Take Final Certification Quiz
+        </span>
+    </a>
+</div>
+
+<style>
+    .cyber-quiz-btn {
+        position: relative;
+        display: block;
+        width: 100%;
+        padding: 16px;
+        text-align: center;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1.5px;
+        color: #060913;
+        background: #00ffcc;
+        border-radius: 8px;
+        border: 1px solid #00ffcc;
+        box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        box-sizing: border-box;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .cyber-quiz-btn:hover {
+        background: #ff3366;
+        color: #ffffff;
+        border-color: #ff3366;
+        box-shadow: 0 0 25px rgba(255, 51, 102, 0.6);
+        transform: translateY(-2px);
+    }
+
+    .cyber-quiz-btn .btn-text {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .cyber-quiz-btn i {
+        font-size: 16px;
+    }
+</style>
                 
                 <% if (course.modules && course.modules.length > 0) { %>
                     <% course.modules.forEach(function(mod, index) { %>
@@ -155,5 +216,6 @@
             }
         }
     </script>
+
 </body>
 </html>

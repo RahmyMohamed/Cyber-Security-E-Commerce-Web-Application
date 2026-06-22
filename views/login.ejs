@@ -1,17 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>Academy - Login</title>
-    <style>/* மேல இருக்குற அதே ஸ்டைல் தான் */
-        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: #1e1e1e; padding: 30px; border-radius: 12px; border: 1px solid #333; width: 320px; text-align: center; }
-        h2 { color: #00ffcc; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #444; background: #2a2a2a; color: #fff; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #00ffcc; color: #121212; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+    <meta charset="UTF-8">
+    <title>Shield Academy - Login Structure</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        #matrix-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1; 
+            pointer-events: none;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: #060913; color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        
+        /* =======================================================
+           🛡️ ANIMATED CYBER SHIELD LOGO & BRAND NAME STYLING
+           ======================================================= */
+        .brand-container {
+            text-align: center;
+            margin-bottom: 25px;
+            cursor: default;
+            user-select: none;
+        }
+        .animated-logo {
+            position: relative;
+            width: 70px;
+            height: 75px;
+            margin: 0 auto 15px auto;
+            background: transparent;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            border: 2px solid #00ffcc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            animation: shieldPulse 3s infinite ease-in-out;
+        }
+        .animated-logo::before {
+            content: "🛡️";
+            font-size: 32px;
+        }
+        .brand-name {
+            font-size: 26px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+            margin: 0;
+            animation: neonGlitch 4s infinite alternate;
+        }
+
+        /* --- LOGO & TEXT ANIMATION ENGINE --- */
+        @keyframes shieldPulse {
+            0% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 255, 204, 0.4); border-color: #00ffcc; }
+            50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 0, 85, 0.7); border-color: #ff0055; }
+            100% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 255, 204, 0.4); border-color: #00ffcc; }
+        }
+        @keyframes neonGlitch {
+            0%, 95%, 100% { text-shadow: 0 0 10px rgba(0, 255, 204, 0.6), 0 0 20px rgba(0, 255, 204, 0.3); color: #fff; }
+            96% { text-shadow: -3px -2px 0 #ff0055, 3px 2px 0 #00ffcc; color: #ff0055; }
+            98% { text-shadow: 3px 2px 0 #ff0055, -3px -2px 0 #00ffcc; color: #00ffcc; }
+        }
+
+        /* =======================================================
+           💳 CORE CONTAINER LAYER CARD STYLING
+           ======================================================= */
+        .card { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(10px); padding: 30px; border-radius: 12px; border: 1px solid rgba(31, 41, 55, 0.7); width: 320px; text-align: center; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        h2 { color: #00ffcc; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid rgba(31, 41, 55, 0.7); background: #0b0f19; color: #fff; border-radius: 6px; box-sizing: border-box; }
+        input:focus { border-color: #00ffcc; outline: none; }
+        button { width: 100%; padding: 12px; background: #00ffcc; color: #060913; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; }
+        button:hover { background: #00ccaa; box-shadow: 0 0 15px #00ffcc; }
         a { color: #00ffcc; text-decoration: none; font-size: 14px; display: block; margin-top: 15px; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
+
+    <canvas id="matrix-bg"></canvas>
+
+    <div class="brand-container">
+        <div class="animated-logo"></div>
+        <h1 class="brand-name">Shield Academy</h1>
+    </div>
+
     <div class="card">
         <h2>Login</h2>
         <% if(error) { %> <p style="color: #ff3333;"><%= error %></p> <% } %>
@@ -22,5 +96,58 @@
         </form>
         <a href="/register">Don't have an account? Sign Up</a>
     </div>
+
+<script>
+const canvas = document.getElementById('matrix-bg');
+const ctx = canvas.getContext('2d');
+let particlesArray = [];
+const numParticles = 85; 
+const maxConnectDistance = 120;
+let mouse = { x: null, y: null, radius: 160 };
+
+window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.7; 
+        this.vy = (Math.random() - 0.5) * 0.7;
+        this.radius = Math.random() * 2.5 + 1;
+    }
+    draw() {
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        ctx.fillStyle = 'rgba(255, 0, 85, 0.7)'; ctx.fill();
+    }
+    update() {
+        if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+        if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+        let dx = mouse.x - this.x; let dy = mouse.y - this.y; let dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < mouse.radius && mouse.x !== null) {
+            this.x += (dx / dist) * ((mouse.radius - dist) / mouse.radius) * 1.5;
+            this.y += (dy / dist) * ((mouse.radius - dist) / mouse.radius) * 1.5;
+        }
+        this.x += this.vx; this.y += this.vy;
+    }
+}
+function initParticles() { for(let i=0; i<numParticles; i++) particlesArray.push(new Particle()); }
+function connectNodes() {
+    for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a + 1; b < particlesArray.length; b++) {
+            let dx = particlesArray[a].x - particlesArray[b].x; let dy = particlesArray[a].y - particlesArray[b].y;
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < maxConnectDistance) {
+                ctx.strokeStyle = `rgba(255, 0, 85, ${(1 - (dist / maxConnectDistance)) * 0.18})`;
+                ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(particlesArray[a].x, particlesArray[a].y); ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke();
+            }
+        }
+    }
+}
+function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); for(let i=0; i<particlesArray.length; i++) { particlesArray[i].update(); particlesArray[i].draw(); } connectNodes(); requestAnimationFrame(animateParticles); }
+initParticles(); animateParticles();
+</script>
 </body>
 </html>

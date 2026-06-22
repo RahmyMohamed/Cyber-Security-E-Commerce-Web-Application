@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secured Assessment Node</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: #060913; color: #fff; font-family: sans-serif; padding: 40px; }
+        .quiz-container { max-width: 600px; margin: 0 auto; background: rgba(17, 24, 39, 0.8); padding: 30px; border-radius: 12px; border: 1px solid #1f2937; }
+        h2 { color: #00ffcc; border-bottom: 1px solid #1f2937; padding-bottom: 10px; }
+        .q-block { margin-bottom: 20px; }
+        .option { display: block; background: #0b0f19; padding: 12px; margin: 8px 0; border: 1px solid #1f2937; border-radius: 6px; cursor: pointer; }
+        .option input { margin-right: 10px; }
+        .submit-btn { width: 100%; padding: 14px; background: #00ffcc; color: #000; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+    <div class="quiz-container">
+
+        <!-- 🔥 NEW: CYBER STYLE BACK TO COURSE BUTTON -->
+<div style="margin-bottom: 20px;">
+    <a href="/course/<%= course.id %>" class="quiz-back-btn">
+        <i class="fa-solid fa-arrow-left"></i> Return to Curriculum Node
+    </a>
+</div>
+
+<style>
+
+    #matrix-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1; 
+            pointer-events: none;
+}
+    .quiz-back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #00ffcc;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 8px 16px;
+        border: 1px solid rgba(0, 255, 204, 0.2);
+        border-radius: 6px;
+        background: rgba(0, 255, 204, 0.03);
+        transition: all 0.3s ease;
+    }
+
+    .quiz-back-btn:hover {
+        color: #ffffff;
+        background: #ff3366;
+        border-color: #ff3366;
+        box-shadow: 0 0 15px rgba(255, 51, 102, 0.4);
+        transform: translateX(-3px);
+    }
+</style>
+        <h2><i class="fa-solid fa-graduation-cap"></i> Final Assessment Node</h2>
+        <p>Complete this challenge with a 100% score to automatically trigger your Certificate generation pipeline.</p>
+        
+        <form id="quizForm">
+            <input type="hidden" id="courseId" value="<%= course.id %>">
+            <% questions.forEach(function(q, i) { %>
+                <div class="q-block">
+                    <h4><%= i+1 %>. <%= q.q %></h4>
+                    <% q.options.forEach(function(opt) { %>
+                        <label class="option">
+                            <input type="radio" name="q<%= q.id %>" value="<%= opt %>" required> <%= opt %>
+                        </label>
+                    <% }) %>
+                </div>
+            <% }) %>
+            <button type="button" class="submit-btn" onclick="submitAssessment()">Submit Core Log</button>
+        </form>
+        <div id="result-node" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
+    </div>
+
+    <script>
+        async function submitAssessment() {
+            const form = document.getElementById('quizForm');
+            const courseId = document.getElementById('courseId').value;
+            
+            // டம்மி வேலிடேஷன் ஸ்கோர் கணக்கீடு (HTTP மற்றும் Forbidden Access சரியான பதில்கள்)
+            let score = 0;
+            if(form.q1 && form.q1.value === "HTTP") score++;
+            if(form.q2 && form.q2.value === "Forbidden Access") score++;
+
+            const response = await fetch('/api/quiz/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ courseId, score, totalQuestions: 2 })
+            });
+
+            const data = await response.json();
+            const resultNode = document.getElementById('result-node');
+            
+            if(score == 2) {
+                resultNode.innerHTML = "<span style='color: #00ff00;'>🎉 100% Score! n8n Automation has successfully dispatched your Certificate to your email!</span>";
+            } else {
+                resultNode.innerHTML = `<span style='color: #ff3333;'>❌ Score: ${score}/2. Try again to clear the criteria lock node.</span>`;
+            }
+        }
+    </script>
+</body>
+</html>

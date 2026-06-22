@@ -216,7 +216,6 @@ app.get('/course/:courseId', checkAuth, async (req, res) => {
     const { courseId } = req.params;
     
     try {
-        // Strict Database Check: யூசர் உண்மையிலேயே இந்தக் கோர்ஸை வாங்கியிருக்காரா என்று சரிபார்க்கிறது
         const isEnrolled = await Order.findOne({ userEmail: req.user.email, courseId: courseId });
         
         if (!isEnrolled) {
@@ -232,6 +231,52 @@ app.get('/course/:courseId', checkAuth, async (req, res) => {
     }
 });
 
+// =======================================================
+// 🧠 LIVE CYBER SECURITY QUIZ ENGINES
+// =======================================================
+const quizQuestions = [
+    { id: 1, q: "Which protocol is completely unencrypted?", options: ["HTTPS", "HTTP", "SSH", "SFTP"], answer: "HTTP" },
+    { id: 2, q: "What does a 403 HTTP status code signify?", options: ["Not Found", "Internal Error", "Forbidden Access", "Bad Request"], answer: "Forbidden Access" }
+];
+
+app.get('/course/:courseId/quiz', checkAuth, async (req, res) => {
+    const { courseId } = req.params;
+    
+    try {
+        const isEnrolled = await Order.findOne({ userEmail: req.user.email, courseId: courseId });
+        if (!isEnrolled) return res.status(403).send("<h1>Access Denied</h1><p>Unlock this module criteria node first.</p>");
+        
+        const selectedCourse = courses.find(c => c.id === courseId);
+        res.render('quiz', { user: req.user, course: selectedCourse, questions: quizQuestions });
+    } catch (err) {
+        res.status(500).send("Quiz rendering engine failure.");
+    }
+});
+
+app.post('/api/quiz/submit', checkAuth, async (req, res) => {
+    const { courseId, score, totalQuestions } = req.body;
+    
+    if (parseInt(score) === parseInt(totalQuestions)) {
+        try {
+            console.log(`[QUIZ-SUCCESS] ${req.user.email} cleared criteria node. Triggering n8n Certificate Generator...`);
+            const n8nCertificateUrl = 'http://localhost:5678/webhook-test/generate-certificate';
+            
+            await axios.post(n8nCertificateUrl, {
+                name: req.user.name,
+                email: req.user.email,
+                courseId: courseId,
+                status: "COMPLETED"
+            });
+        } catch (err) {
+            console.log("[AUTOMATION-WARN] n8n Certificate webhook node offline during quiz clearance.");
+        }
+    }
+    res.json({ success: true, score });
+});
+
+// =======================================================
+// 📊 ADMINISTRATIVE CONTROL & METRICS ENDPOINTS
+// =======================================================
 app.get('/admin/dashboard', checkAuth, checkAdmin, async (req, res) => {
     try {
         const totalUsers = await User.countDocuments();
@@ -248,6 +293,30 @@ app.get('/admin/dashboard', checkAuth, checkAdmin, async (req, res) => {
         });
     } catch (err) {
         res.status(500).send("Admin infrastructure audit metric failure.");
+    }
+});
+
+app.get('/api/admin/financial-stats', checkAuth, checkAdmin, async (req, res) => {
+    try {
+        const allOrders = await Order.find({});
+        let totalRevenue = 0;
+        const courseSalesCount = {};
+
+        allOrders.forEach(order => {
+            const courseDetails = courses.find(c => c.id === order.courseId);
+            const price = courseDetails ? courseDetails.price : 0;
+            totalRevenue += price;
+            courseSalesCount[order.courseName] = (courseSalesCount[order.courseName] || 0) + 1;
+        });
+
+        res.json({
+            success: true,
+            totalRevenue,
+            totalSales: allOrders.length,
+            breakdown: courseSalesCount
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Analytics extraction node failure." });
     }
 });
 
@@ -279,8 +348,8 @@ app.post('/api/checkout-mock', async (req, res) => {
 
     try {
         const n8nWebhookUrl = 'http://localhost:5678/webhook-test/ecommerce-order';
-        
         console.log(`[GATEWAY-PENDING] Despatching payload to n8n node...`);
+        
         const n8nResponse = await axios.post(n8nWebhookUrl, { 
             name, 
             email, 
