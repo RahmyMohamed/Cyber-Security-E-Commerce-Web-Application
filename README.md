@@ -1,5 +1,6 @@
 # 🛡️ Shield Academy - Professional Cyber Store & Automation Lab
 ![preview img](image.png)
+![preview img](image-2.png)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/)
 
