@@ -40,5 +40,5 @@ Follow these steps to deploy the infrastructure node locally:
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/YOUR_USERNAME/shield-academy.git](https://github.com/YOUR_USERNAME/shield-academy.git)
+git clone https://github.com/RahmyMohamed/Cyber-Security-E-Commerce-Web-Application.git
 cd shield-academy
