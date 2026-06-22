@@ -46,3 +46,30 @@ Follow these steps to deploy the infrastructure node locally:
 ```bash
 git clone https://github.com/RahmyMohamed/Cyber-Security-E-Commerce-Web-Application.git
 cd shield-academy
+```
+2. Install Dependency Nodes
+```Bash
+npm install
+```
+3. Environment & Server Configuration
+Ensure your server variables or environment parameters point to your active n8n instance infrastructure:
+Open your main orchestration file (server.js) and assign your n8n Production Webhook URL to the designated pipeline variable:
+
+JavaScript
+  const n8nWebhookUrl = 'http://localhost:5678/webhook/your-production-endpoint';
+
+4. Boot the Microservice
+```Bash
+npm start
+The console will initialize, and the storefront will be reachable at http://localhost:3000.
+```
+🧠 Core Engineering Learning Outcomes
+Developed during technical upskilling at Imara Software Solutions, this system provided deep architectural expertise in:
+
+Transitioning workflows from conditional Test URLs to permanent, autonomous Production URLs inside enterprise systems.
+
+Managing event-driven request-response lifecycles via backend communication loops.
+
+Structuring multi-node integration paths involving dynamic parameters, data mappings, and downstream routing targets.
+
+© 2026 Shield Academy Enterprise. Built for high-performance workflow automation studies.
