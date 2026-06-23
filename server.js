@@ -259,7 +259,7 @@ app.post('/api/quiz/submit', checkAuth, async (req, res) => {
     if (parseInt(score) === parseInt(totalQuestions)) {
         try {
             console.log(`[QUIZ-SUCCESS] ${req.user.email} cleared criteria node. Triggering n8n Certificate Generator...`);
-            const n8nCertificateUrl = 'http://localhost:5678/webhook-test/generate-certificate';
+            const n8nCertificateUrl = 'http://localhost:5678/webhook/ecommerce-order';
             
             await axios.post(n8nCertificateUrl, {
                 name: req.user.name,
@@ -347,7 +347,7 @@ app.post('/api/checkout-mock', async (req, res) => {
     }
 
     try {
-        const n8nWebhookUrl = 'http://localhost:5678/webhook-test/ecommerce-order';
+        const n8nWebhookUrl = 'http://localhost:5678/webhook/ecommerce-order';
         console.log(`[GATEWAY-PENDING] Despatching payload to n8n node...`);
         
         const n8nResponse = await axios.post(n8nWebhookUrl, { 
