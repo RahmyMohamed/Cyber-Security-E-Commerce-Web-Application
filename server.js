@@ -19,7 +19,7 @@ const JWT_SECRET = 'my_super_secret_cyber_security_key_123';
 // =======================================================
 // 🗄️ MONGODB PERMANENT DATABASE CONFIGURATION
 // =======================================================
-mongoose.connect('mongodb://localhost:27017/shield_academy')
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/shield_academy')
     .then(() => console.log('[DATABASE] Permanent MongoDB cluster connected successfully!'))
     .catch((err) => console.error('[CRITICAL] MongoDB storage connection failure:', err.message));
 
