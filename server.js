@@ -382,3 +382,4 @@ app.listen(PORT, () => {
     console.log(`E-Commerce Scale Server running at: http://localhost:${PORT}`);
     console.log(`=======================================================`);
 });
+module.exports = app;
